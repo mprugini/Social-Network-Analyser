@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Social Network Analyser</title>
+	<script type="text/javascript" src="data.json"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div class="jumbotron text-center">
+  <h1>Social Network</h1>
+</div>
+
+<div class="container text-center">
+	<div class="row">
+		<div class="col-sm-12">
+			<h3>Select the user ID you want</h3>
+			Select the user ID between 1-20 <input type="number" id="myNumber" value="1">
+			<button onclick="myFunction()">Try it</button>
+			<div id="demo4"></div>
+		</div>
+	</div>
+</div>
+
+<div class="container text-center">
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>Direct Friends</h3>
+      <p>Those people who are directly connected to the chosen user;</p>
+      <p id="demo"></p>
+    </div>
+    <div class="col-sm-4">
+      <h3>Friends of friends</h3>
+      <p>Those who are two steps away from the chosen user but not directly connected to the chosen user;</p>
+	  <p id="demo2"></p>
+    </div>
+    <div class="col-sm-4">
+      <h3>Suggested Friends</h3>        
+      <p>People in the group who know 2 or more direct friends of the 
+	  chosen user but are not directly connected to the chosen user;</p>
+      <p id="demo3"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+	var i;
+	var people = [
+  {
+    "id": 1,
+    "firstName": "Paul",
+    "surname": "Crowe",
+    "age": 28,
+    "gender": "male",
+    "friends": [
+      2
+    ]
+  },
+  {
+    "id": 2,
+    "firstName": "Rob",
+    "surname": "Fitz",
+    "age": 23,
+    "gender": "male",
+    "friends": [
+      1,
+      3
+    ]
+  },
+  {
+    "id": 3,
+    "firstName": "Ben",
+    "surname": "O'Carolan",
+    "age": null,
+    "gender": "male",
+    "friends": [
+      2,
+      4,
+      5,
+      7
+    ]
+  },
+  {
+    "id": 4,
+    "firstName": "Victor",
+    "surname": "",
+    "age": 28,
+    "gender": "male",
+    "friends": [
+      3
+    ]
+  },
+  {
+    "id": 5,
+    "firstName": "Peter",
+    "surname": "Mac",
+    "age": 29,
+    "gender": "male",
+    "friends": [
+      3,
+      6,
+      11,
+      10,
+      7
+    ]
+  },
+  {
+    "id": 6,
+    "firstName": "John",
+    "surname": "Barry",
+    "age": 18,
+    "gender": "male",
+    "friends": [
+      5
+    ]
+  },
+  {
+    "id": 7,
+    "firstName": "Sarah",
+    "surname": "Lane",
+    "age": 30,
+    "gender": "female",
+    "friends": [
+      3,
+      5,
+      20,
+      12,
+      8
+    ]
+  },
+  {
+    "id": 8,
+    "firstName": "Susan",
+    "surname": "Downe",
+    "age": 28,
+    "gender": "female",
+    "friends": [
+      7
+    ]
+  },
+  {
+    "id": 9,
+    "firstName": "Jack",
+    "surname": "Stam",
+    "age": 28,
+    "gender": "male",
+    "friends": [
+      12
+    ]
+  },
+  {
+    "id": 10,
+    "firstName": "Amy",
+    "surname": "Lane",
+    "age": 24,
+    "gender": "female",
+    "friends": [
+      5,
+      11
+    ]
+  },
+  {
+    "id": 11,
+    "firstName": "Sandra",
+    "surname": "Phelan",
+    "age": 28,
+    "gender": "female",
+    "friends": [
+      5,
+      10,
+      19,
+      20
+    ]
+  },
+  {
+    "id": 12,
+    "firstName": "Laura",
+    "surname": "Murphy",
+    "age": 33,
+    "gender": "female",
+    "friends": [
+      7,
+      9,
+      13,
+      20
+    ]
+  },
+  {
+    "id": 13,
+    "firstName": "Lisa",
+    "surname": "Daly",
+    "age": 28,
+    "gender": "female",
+    "friends": [
+      12,
+      14,
+      20
+    ]
+  },
+  {
+    "id": 14,
+    "firstName": "Mark",
+    "surname": "Johnson",
+    "age": 28,
+    "gender": "male",
+    "friends": [
+      13,
+      15
+    ]
+  },
+  {
+    "id": 15,
+    "firstName": "Seamus",
+    "surname": "Crowe",
+    "age": 24,
+    "gender": "male",
+    "friends": [
+      14
+    ]
+  },
+  {
+    "id": 16,
+    "firstName": "Daren",
+    "surname": "Slater",
+    "age": 28,
+    "gender": "male",
+    "friends": [
+      18,
+      20
+    ]
+  },
+  {
+    "id": 17,
+    "firstName": "Dara",
+    "surname": "Zoltan",
+    "age": 48,
+    "gender": "male",
+    "friends": [
+      18,
+      20
+    ]
+  },
+  {
+    "id": 18,
+    "firstName": "Marie",
+    "surname": "D",
+    "age": 28,
+    "gender": "female",
+    "friends": [
+      17
+    ]
+  },
+  {
+    "id": 19,
+    "firstName": "Catriona",
+    "surname": "Long",
+    "age": 28,
+    "gender": "female",
+    "friends": [
+      11,
+      20
+    ]
+  },
+  {
+    "id": 20,
+    "firstName": "Katy",
+    "surname": "Couch",
+    "age": 28,
+    "gender": "female",
+    "friends": [
+      7,
+      11,
+      12,
+      13,
+      16,
+      17,
+      19
+    ]
+  }
+];
+	var personId = null;
+	var arr = [];
+	var mutualFriends = [];
+	var friendOfFriends = [];
+	var suggestedFriends = [];
+	//var allUsers = [];
+	
+	//display all the users from json file
+	function displayAllUsers(obj){
+		var out = "";
+		for(var i = 0; i < obj.length; i++) {
+			//allUsers.push(obj[i].firstName + " " + obj[i].surname + "<br>");
+			out += "ID " + obj[i].id + ": " + obj[i].firstName + " " + obj[i].surname + "<br>"
+		}
+		//out += "</ul>"
+		document.getElementById("demo4").innerHTML = out;
+	}
+	
+	//select the user ID you want and display information about that user
+	function myFunction(){
+		personId = document.getElementById("myNumber").value;
+		mutualFriend(personId,people);
+		friendOfFriend(personId,people);
+		suggestedFriend(personId,people);
+		mutualFriends = [];
+		friendOfFriends = [];
+		suggestedFriends = [];
+		
+	}
+	
+	//check weather integer is in array
+	function contains(arrayOfNumbers, valueToCheck){
+		for (var i = 0; i < arrayOfNumbers.length; i++) {
+			if (arrayOfNumbers[i] == valueToCheck) {return true;}
+			
+		}
+	}
+	
+	//finding mutual friends - direct friends
+	function mutualFriend(nameId,obj){
+		for (var i = 0; i < obj[nameId-1].friends.length; i++) {
+			mutualFriends.push(obj[obj[nameId-1].friends[i] - 1].firstName + " " + obj[obj[nameId-1].friends[i] - 1].surname)
+		}
+		
+		document.getElementById("demo").innerHTML = "Mutual Friends of person ID " + nameId + " are: " + mutualFriends;
+	}
+	
+	//finding friends which are two step away from selected person
+	function friendOfFriend(nameId,obj){
+		
+		for (var i = 0; i < obj[nameId-1].friends.length; i++) {
+			var mutual = obj[nameId-1].friends[i];
+			for (var j = 0; j < obj[mutual-1].friends.length; j++) {
+				arr.push(obj[mutual-1].friends[j]);
+			}
+			
+			//remove all IDs that are equal to users ID
+			for (var k = 0; k < arr.length; k++){
+				if (obj[nameId-1].id === arr[k]) {
+					var index = arr.indexOf(arr[k]);
+					if (index > -1) {
+						arr.splice(index, 1);
+					}
+				}
+			}
+			
+			//remove all IDs which are located in users friend list
+			for (var l = 0; l < arr.length; l++){
+				if (contains(obj[nameId-1].friends, arr[l])) {
+					var index = l;
+					if (index > -1) {
+						arr.splice(index, 1);
+					}
+				}
+			}
+		}
+		
+		//remove all duplicates from arr of IDs
+		arr = arr.filter( function( item, index, inputArray ) {
+           return inputArray.indexOf(item) == index;
+		});
+		
+		//display firstname and lastname of IDs and push them to array
+		for (var j = 0; j < arr.length; j++) {
+			friendOfFriends.push(obj[arr[j]-1].firstName + " " + obj[arr[j]-1].surname);
+		}
+		
+		//display final result - firstname and lastname 
+		document.getElementById("demo2").innerHTML = "Friends who are two step away from Person ID " + nameId + " are: " + friendOfFriends;
+	}
+	
+	/*Find people in the group who know 2 or more direct friends of the 
+	chosen user but are not directly connected to the chosen user*/
+	function suggestedFriend(nameId,obj){
+		var counter = 0;
+		for (var i = 0; i < arr.length; i++) {
+			for (var j = 0; j < obj[arr[i]-1].friends.length; j++) {
+				if(contains(obj[nameId-1].friends, obj[arr[i]-1].friends[j])) {
+					counter++;
+				}
+			}
+			if(counter > 1) {
+				suggestedFriends.push(obj[arr[i]-1].firstName + " " + obj[arr[i]-1].surname);
+				counter = 0;
+			}
+		}
+		
+		suggestedFriends = suggestedFriends.filter( function( item, index, inputArray ) {
+           return inputArray.indexOf(item) == index;
+		});
+		
+		document.getElementById("demo3").innerHTML = "Suggested friends of the person ID " + nameId + " are: " + suggestedFriends;
+	}
+	
+	displayAllUsers(people);
+</script>
+
+</body>
+
+</html>
